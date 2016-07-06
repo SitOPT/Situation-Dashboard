@@ -199,7 +199,13 @@ var startSRS = function(template, thing){
 			console.log("Not found");
 		} else {*/
 			//console.log(JSON.stringify(doc[0]));
-			var xml = JSON.stringify(doc[0].xml.substr(doc[0].xml.indexOf('<')));
+			var xml = JSON.stringify(doc[0].xml.substr(doc[0].xml.indexOf('<')))
+				.replace(/\\t/g, " ")
+				.replace(/\\n/g, " ")
+				.replace(/\\r/g, " ")
+				.replace(/\t/g, " ")
+				.replace(/\n/g, " ")
+				.replace(/\r/g, " ");
 			var exec = require('child_process').exec, child;
 			child = exec('java -jar public/nodeRed/mappingString.jar ' + thing + ' ' + xml,
 				function (error, stdout, stderr){

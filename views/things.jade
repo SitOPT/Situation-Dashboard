@@ -39,7 +39,7 @@ html
                 br
                 br 
                 | Situation Templates:    
-                select#selectedTemplate(onchange='startRec()')
+                select#selectedTemplate()
                   -for (var j in templates)
                     -var template = templates[j]
                     option(value='#{template.id }', title='Tooltip') #{template.name +" "+ template.id}
