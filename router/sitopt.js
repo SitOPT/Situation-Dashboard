@@ -190,7 +190,7 @@ function queryTemplateID(id, callback){
    	});
 }
 
-var startSRS = function(template, thing){
+var startSRS = function(template, thing, callback){
 	//var database = conn.database('situationtemplates');
 	console.log("Test");
 	console.log(template);
@@ -198,7 +198,7 @@ var startSRS = function(template, thing){
 		/*if (err) {
 			console.log("Not found");
 		} else {*/
-			//console.log(JSON.stringify(doc[0]));
+			console.log(JSON.stringify(doc[0]));
 			var xml = JSON.stringify(doc[0].xml.substr(doc[0].xml.indexOf('<')))
 				.replace(/\\t/g, " ")
 				.replace(/\\n/g, " ")
@@ -212,6 +212,11 @@ var startSRS = function(template, thing){
 		  			//open('http://localhost:1880');
 		    		console.log('stdout: ' + stdout);
 				      console.log('exec error: ' + stderr);
+					if (stderr == null || stderr == "" || stderr == "java.io.FileNotFoundException: settings.properties (No such file or directory)\n\tat java.io.FileInputStream.open0(Native Method)\n\tat java.io.FileInputStream.open(FileInputStream.java:195)\n\tat java.io.FileInputStream.<init>(FileInputStream.java:138)\n\tat java.io.FileInputStream.<init>(FileInputStream.java:93)\n\tat utils.IOUtils.deployToNodeRED(IOUtils.java:144)\n\tat mapping.Mapper.map(Mapper.java:78)\n\tat mapping.Main.main(Main.java:134)\n") {
+						callback("Successfully started recognition");
+					} else {
+						callback("An error occurred");
+					}
 			});
 
 			//request('http://localhost:5984/situationtemplates/'+templateID+'/'+ (Object.keys(doc._attachments)[0]), function (error, response, body) {
@@ -244,7 +249,9 @@ exports.things_post_handler = function(req, res) {
 	console.log("TemplateID: " + req.body.templateid);
 	console.log("ThingID: " + req.body.thingid);
 	console.log("ReqID" + req.body.id);
-    startSRS(req.body.id, req.body.thing);
+    startSRS(req.body.templateid, req.body.thing, function (status) {
+		res.json(status);
+	});
     //res.render('things', { title: 'Things', things: things, templates: templates});
 };
 

@@ -4,6 +4,7 @@ html
    
     title SitOPT
     link(rel='StyleSheet', href='style.css', type='text/css', media='screen')
+    script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js")
   body
     #body2
       #page
@@ -22,27 +23,20 @@ html
               - var thing = things[i]
               .boxed
 
-                br
-                | Name: #{thing.name} 
-                br
-                | Monitored: #{thing.monitored}
-                br
-                | Location: 
-                a(href='https://maps.google.com/?q=#{thing.coordinates}')  
+                p(id="name" + i) Name: #{thing.name}
+                p Monitored: #{thing.monitored}
+                p Location:
+                a(href='https://maps.google.com/?q=#{thing.coordinates}')
                   | #{thing.coordinates}
-                br
-                | ID: #{thing.id} 
-                br
-                | URL: #{thing.url}
-                br
-                | Description: #{thing.description}
-                br
+                p(id="id" + i) ID: #{thing.id}
+                p URL: #{thing.url}
+                p Description: #{thing.description}
                 br 
                 | Situation Templates:    
-                select#selectedTemplate()
+                select(id="selectedTemplate" + i)
                   -for (var j in templates)
                     -var template = templates[j]
-                    option(value='#{template.id }', title='Tooltip') #{template.name +" "+ template.id}
+                    option(value="#{template.id}") #{template.name +" "+ template.id}
                 br 
                 | Situation Recognition System:    
                 select
@@ -52,12 +46,8 @@ html
                 br
                 | Store every situation (when occured attribute does not change) (not implemented) 
                 input#check(type='checkbox', name='store', value='true')
-
-
-                form(method='post', action='/') 
-                  input(type='submit', value='Start situation recognition', onclick='startRecognition("' + thing.name + '");')
-                  input(type='hidden', id='sendTemplate', name= "id", value= '')
-                  input(type='hidden', id='sendThing', name="thing", value='')
+                br
+                input(type='submit', value='Start situation recognition', onclick='startRecognition("' + thing.name + '", ' + i + ');')
                 br
                 br
                 | Situations: 
@@ -101,14 +91,11 @@ html
 
     script(language='JavaScript').
                   
-      function startRecognition(thing)
+      function startRecognition(thing, index)
         {
-        var e = document.getElementById('selectedTemplate');
-        var strUser = e.options[e.selectedIndex].value;
-          var ids = document.getElementsByName("id");
-          var things = document.getElementsByName("thing");
-          for (var i = 0; i < ids.length; i++) {
-            ids[i].value = strUser;
-            things[i].value = thing;
-          }
-        }  
+          var template = document.getElementById('selectedTemplate' + index).value
+          var thing = document.getElementById('id' + index).innerHTML.substr(4);
+          $.post('/', {templateid: template, thingid: thing}, function (data, status) {
+            alert(data);
+          });
+        }
