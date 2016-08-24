@@ -190,7 +190,7 @@ function queryTemplateID(id, callback){
    	});
 }
 
-var startSRS = function(template, thing, callback){
+var startSRS = function(template, thing, flavor, callback){
 	//var database = conn.database('situationtemplates');
 	console.log("Test");
 	console.log(template);
@@ -206,8 +206,11 @@ var startSRS = function(template, thing, callback){
 				.replace(/\t/g, " ")
 				.replace(/\n/g, " ")
 				.replace(/\r/g, " ");
-			var exec = require('child_process').exec, child;
-			child = exec('java -jar public/nodeRed/mappingString.jar ' + thing + ' ' + xml,
+			var exec = require('child_process').exec;
+			var program = 'java -jar public/' + flavor + '/mappingString.jar';
+		    var call = program + ' ' + (flavor == 'nodeRed' ? thing + ' ' : '') + xml;
+		console.log("call: " + call);
+			exec(call,
 				function (error, stdout, stderr){
 		  			//open('http://localhost:1880');
 		    		console.log('stdout: ' + stdout);
@@ -248,8 +251,9 @@ exports.things_post_handler = function(req, res) {
 	console.log("Body: " + JSON.stringify(req.body));
 	console.log("TemplateID: " + req.body.templateid);
 	console.log("ThingID: " + req.body.thingid);
-	console.log("ReqID" + req.body.id);
-    startSRS(req.body.templateid, req.body.thing, function (status) {
+	console.log("ReqID: " + req.body.id);
+	console.log("Flavor: " + req.body.flavor);
+    startSRS(req.body.templateid, req.body.thingid, req.body.flavor, function (status) {
 		res.json(status);
 	});
     //res.render('things', { title: 'Things', things: things, templates: templates});
