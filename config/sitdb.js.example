@@ -1,0 +1,8 @@
+/**
+ * Created by armin on 13.09.16.
+ */
+module.exports = {
+    "host": "localhost",
+    "port": 10010,
+    "protocol": "http"
+};

@@ -48,6 +48,7 @@ app.get('/situationtemplate', sitopt.situationtemplate);
 app.get('/nodered', sitopt.nodered);
 
 app.post('/', sitopt.things_post_handler);
+app.post('/deleteFlow', sitopt.deleteFlow);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));

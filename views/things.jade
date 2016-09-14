@@ -94,7 +94,7 @@ html
       function startRecognition(thing, index)
         {
           var template = document.getElementById('selectedTemplate' + index).value
-          var thing = document.getElementById('id' + index).innerHTML.substr(4);
+          var thing = document.getElementById('name' + index).innerHTML.substr(6);
           var flavor = document.getElementById('select' + index).value
           $.post('/', {templateid: template, thingid: thing, flavor: flavor}, function (data, status) {
             alert(data);

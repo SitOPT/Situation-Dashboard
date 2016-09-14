@@ -1,13 +1,14 @@
 #navibar
-  | 
-  a(href='/') Home 
-  | 
-  a(href='/things') Things 
-  |    
-  a(href='/situationtemplate') Situation Templates 
-  | 
-  a(href='/api') API Reference 
-  | 
+  a(href='/') Home
+  a(href='/things') Things
+  a(href='/situationtemplate') Situation Templates
+  a(href='/api') API Reference
   a(href='/nodered') NodeRed
+  a(href='asdf' id='rmp') RMP
 
-
+  script(language='JavaScript').
+    window.onload = function () {
+      var rmp = document.getElementById('rmp');
+      var url = window.location.protocol + "//" + window.location.hostname + ":1337";
+      rmp.setAttribute('href', url);
+    };
