@@ -32,11 +32,11 @@ html
                 p URL: #{thing.url}
                 p Description: #{thing.description}
                 br 
-                | Situation Templates:    
-                select(id="selectedTemplate" + i)
+                | Situation Templates:
+                select(id="selectedTemplate" + i, onchange="templateChange(" + i + ")")
                   -for (var j in templates)
                     -var template = templates[j]
-                    option(value="#{template.id}") #{template.name +" "+ template.id}
+                    option(value="#{template._id}",nodered="#{template.nodeRed || template.nodeRed === undefined}",esper="#{template.esper || template.esper === undefined}") #{template.name +" "+ template._id}
                 br 
                 | Situation Recognition System:    
                 select(id='select' + i)
@@ -100,3 +100,37 @@ html
             alert(data);
           });
         }
+
+       window.onload = function() {
+         var el = document.getElementById('selectedTemplate0');
+         var nodeRed = el.children[0].getAttribute('nodered');
+         var esper = el.children[0].getAttribute('esper');
+        for (var i = 0; i < #{templates.length}; i++) {
+          var select = document.getElementById('select' + i);
+          if (!!!esper) {
+            select.children[1].remove();
+          }
+          if (!!!nodeRed) {
+            select.children[0].remove();
+          }
+        }
+       }
+
+       function templateChange(index) {
+         var temp = document.getElementById('selectedTemplate' + index);
+         var val = temp.value;
+         for (var i = 0; i < temp.length; i++) {
+           if (val === temp[i].value) {
+             var child = i;
+             break;
+           }
+         }
+         var nodeRed = temp.children[child].getAttribute('nodered');
+         var esper = temp.children[child].getAttribute('esper');
+         var select = document.getElementById('select' + index);
+         while (select.children.length > 0) {
+           select.children[0].remove();
+         }
+           select.innerHTML += nodeRed === "true" ? '<option value="nodeRed">NodeRed</option>' : "";
+           select.innerHTML += esper === "true" ? '<option value="esper">Esper</option>' : "";
+       }

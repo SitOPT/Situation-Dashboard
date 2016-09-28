@@ -46,14 +46,7 @@ function getAllThings(callback) {
     cursor.each(function(err, doc) {
         assert.equal(err, null);
         if (doc != null) {
-            array.push({
-                id: doc._id,
-                name: doc.name,
-                coordinates: doc.location,
-                description: doc.description,
-                url: doc.url,
-                monitored: doc.monitored}
-            );
+            array.push(doc);
         } else {
             callback(array);
         }
@@ -98,12 +91,8 @@ function getAllTemplates(callback) {
     cursor.each(function(err, doc) {
         assert.equal(err, null);
         if (doc != null) {
-            array.push({
-                id: doc._id,
-                name: doc.name,
-                description: doc.description,
-                situation: doc.situation
-            });
+            console.log(doc)
+            array.push(doc);
         } else {
             callback(array);
         }
